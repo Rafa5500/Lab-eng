@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atividade 2()</title>
+    <title>Atividade 2(Relógio Tempo Real)</title>
+    <script language="Javascript" type="text/Javascript">
+        function atualizarRelogio() {
+            const agora = new Date();
+            const horas = agora.getHours().toString().padStart(2, '0');
+            const minutos = agora.getMinutes().toString().padStart(2, '0');
+            const segundos = agora.getSeconds().toString().padStart(2, '0');
+            const horarioFormatado = `${horas}:${minutos}:${segundos}`;
+
+            alert(horarioFormatado);
+
+            setTimeout(atualizarRelogio, 1000);
+        }
+        atualizarRelogio(); 
+    </script>
 </head>
 <body>
     
