@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Pessoas</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #contador {
+            text-align: center;
+        }
+        .total {
+            margin-bottom: 20px;
+        }
+        .total span {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .total button {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        .pessoa {
+            display: inline-block;
+            margin: 0 20px;
+        }
+        .pessoa img {
+            width: 100px;
+            height: 100px;
+        }
+        .pessoa .buttons {
+            margin: 10px 0;
+        }
+        .pessoa .buttons button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+        .pessoa .buttons .add {
+            background-color: green;
+            color: white;
+        }
+        .pessoa .buttons .remove {
+            background-color: red;
+            color: white;
+        }
+        .pessoa .count {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="contador"></div>
+
+    <script>
+        function createCounter() {
+            const container = document.getElementById('contador');
+
+            const totalDiv = document.createElement('div');
+            totalDiv.className = 'total';
+            const totalSpan = document.createElement('span');
+            totalSpan.textContent = 'Total';
+            const totalValue = document.createElement('span');
+            totalValue.id = 'total-value';
+            totalValue.textContent = '0';
+            const resetButton = document.createElement('button');
+            resetButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M17.657 17.657L13.414 13.414l4.243-4.243a1 1 0 1 0-1.414-1.414L12 10.586 7.757 6.343a1 1 0 0 0-1.414 1.414l4.243 4.243L7.757 17.657a1 1 0 0 0 1.414 1.414l4.243-4.243 4.243 4.243a1 1 0 0 0 1.414-1.414z"/></svg>';
+            resetButton.addEventListener('click', resetCounter);
+            totalDiv.appendChild(totalSpan);
+            totalDiv.appendChild(document.createElement('br'));
+            totalDiv.appendChild(totalValue);
+            totalDiv.appendChild(resetButton);
+            container.appendChild(totalDiv);
+
+            const pessoas = [
+                { tipo: 'Homens', img: 'Homem.jpg', count: 0 },
+                { tipo: 'Mulheres', img: 'Mulher.jpg', count: 0 }
+            ];
+
+            pessoas.forEach(pessoa => {
+                const pessoaDiv = document.createElement('div');
+                pessoaDiv.className = 'pessoa';
+
+                const img = document.createElement('img');
+                img.src = pessoa.img;
+                pessoaDiv.appendChild(img);
+
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.className = 'buttons';
+
+                const addButton = document.createElement('button');
+                addButton.className = 'add';
+                addButton.textContent = '+';
+                addButton.addEventListener('click', () => incrementCount(pessoa.tipo));
+
+                const removeButton = document.createElement('button');
+                removeButton.className = 'remove';
+                removeButton.textContent = '-';
+                removeButton.addEventListener('click', () => decrementCount(pessoa.tipo));
+
+                buttonsDiv.appendChild(addButton);
+                buttonsDiv.appendChild(removeButton);
+                pessoaDiv.appendChild(buttonsDiv);
+
+                const countDiv = document.createElement('div');
+                countDiv.className = 'count';
+                countDiv.id = `${pessoa.tipo.toLowerCase()}-value`;
+                countDiv.textContent = pessoa.count;
+                pessoaDiv.appendChild(countDiv);
+
+                container.appendChild(pessoaDiv);
+            });
+        }
+
+        function incrementCount(tipo) {
+            const countElement = document.getElementById(`${tipo.toLowerCase()}-value`);
+            let count = parseInt(countElement.textContent, 10);
+            count++;
+            countElement.textContent = count;
+            updateTotal();
+        }
+
+        function decrementCount(tipo) {
+            const countElement = document.getElementById(`${tipo.toLowerCase()}-value`);
+            let count = parseInt(countElement.textContent, 10);
+            if (count > 0) {
+                count--;
+                countElement.textContent = count;
+                updateTotal();
+            }
+        }
+
+        function updateTotal() {
+            const homensCount = parseInt(document.getElementById('homens-value').textContent, 10);
+            const mulheresCount = parseInt(document.getElementById('mulheres-value').textContent, 10);
+            const total = homensCount + mulheresCount;
+            document.getElementById('total-value').textContent = total;
+        }
+
+        function resetCounter() {
+            document.getElementById('homens-value').textContent = '0';
+            document.getElementById('mulheres-value').textContent = '0';
+            document.getElementById('total-value').textContent = '0';
+        }
+
+        createCounter();
+    </script>
+</body>
+</htm
