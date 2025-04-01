@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionando React à minha página</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+    function Letreiro({ texto }) {
+        const [displayedText, setDisplayedText] = React.useState("");
+        const [index, setIndex] = React.useState(0);
+    
+    function tick() {
+            if (index < texto.length) {
+                setDisplayedText((prev) => prev + texto[index]);
+                setIndex(index + 1);
+            } else{
+            setTimeout(() => {
+                    setDisplayedText("");
+                    setIndex(0);
+                }, 2000);
+            }
+        }
+    React.useEffect(() => {
+        const interval = setInterval(tick, 200);
+        return () => clearInterval(interval);
+        }, [index]);
+
+    return <h1>{displayedText}</h1>;}
+    const container = document.getElementById('root');
+    const root = ReactDOM.createRoot(container);
+    root.render(<Letreiro texto="Venha estudar na Fatec ❤️" />);
+
+    </script>
+</body>
+</html>
