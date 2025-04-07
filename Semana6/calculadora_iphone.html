@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora iPhone</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+        }
+        #calculator {
+            border-radius: 40px;
+            padding: 20px;
+            width: 300px;
+            background-color: #000;
+        }
+        .display {
+            height: 100px;
+            line-height: 100px;
+            font-size: 60px;
+            text-align: right;
+            padding: 0 20px;
+            margin-bottom: 15px;
+            color: #fff;
+            overflow: hidden;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .button {
+            height: 65px;
+            font-size: 28px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50%;
+            transition: opacity 0.3s ease;
+        }
+        .button:active {
+            opacity: 0.7;
+        }
+        .button-number {
+            background-color: #333;
+            color: #fff;
+        }
+        .button-operator {
+            background-color: #ff9500;
+            color: #fff;
+        }
+        .button-clear {
+            background-color: #a5a5a5;
+            color: #000;
+        }
+        .button-percent {
+            background-color: #a5a5a5;
+            color: #000;
+        }
+        .button-plusminus {
+            background-color: #a5a5a5;
+            color: #000;
+        }
+        .button-equals {
+            background-color: #ff9500;
+            color: #fff;
+        }
+        .button-decimal {
+            background-color: #333;
+            color: #fff;
+        }
+        #zero {
+            grid-column: span 2;
+            border-radius: 35px;
+            text-align: left;
+            padding-left: 27px;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator"></div>
+
+    <script>
+        function createCalculator() {
+            const calculatorDiv = document.getElementById('calculator');
+
+            const display = document.createElement('div');
+            display.classList.add('display');
+            display.textContent = '0';
+            calculatorDiv.appendChild(display);
+
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.classList.add('buttons');
+            calculatorDiv.appendChild(buttonsContainer);
+
+            const buttons = [
+                ['AC', '+/-', '%', '/'],
+                ['7', '8', '9', 'x'],
+                ['4', '5', '6', '-'],
+                ['1', '2', '3', '+'],
+                ['0', ',', '=']
+            ];
+
+            buttons.forEach(row => {
+                row.forEach(label => {
+                    if (label !== '') {
+                        const button = document.createElement('button');
+                        button.classList.add('button');
+                        button.textContent = label;
+
+                        if (['+', '-', 'x', '/'].includes(label)) {
+                            button.classList.add('button-operator');
+                        } else if (label === ',') {
+                            button.classList.add('button-decimal');
+                        } else if (label === 'AC') {
+                            button.classList.add('button-clear');
+                        } else if (label === '=') {
+                            button.classList.add('button-equals');
+                        } else if (label === '%') {
+                            button.classList.add('button-percent');
+                        } else if (label === '+/-') {
+                            button.classList.add('button-plusminus');
+                        } else {
+                            button.classList.add('button-number');
+                        }
+
+                        if (label === '0') {
+                            button.id = 'zero';
+                        }
+
+                        if (label === '=') {
+                            button.style.gridColumn = '4';
+                        }
+
+                        button.addEventListener('click', () => handleButtonClick(label, display));
+                        buttonsContainer.appendChild(button);
+                    }
+                });
+            });
+
+            function handleButtonClick(label, display) {
+                let currentDisplay = display.textContent;
+
+                switch (label) {
+                    case 'AC':
+                        display.textContent = '0';
+                        break;
+                    case '+/-':
+                        if (currentDisplay !== '0') {
+                            if (currentDisplay.startsWith('-')) {
+                                display.textContent = currentDisplay.substring(1);
+                            } else {
+                                display.textContent = '-' + currentDisplay;
+                            }
+                        }
+                        break;
+                    case '%':
+                        try {
+                            const value = parseFloat(currentDisplay.replace(/,/g, '.'));
+                            display.textContent = (value / 100).toString().replace(/\./g, ',');
+                        } catch (error) {
+                            display.textContent = 'Erro';
+                        }
+                        break;
+                    case '=':
+                        try {
+                            const expression = currentDisplay.replace(/,/g, '.').replace(/×/g, '*').replace(/÷/g, '/');
+                            const result = eval(expression).toString();
+                            display.textContent = result.replace(/\./g, ',');
+                        } catch (error) {
+                            display.textContent = 'Erro';
+                        }
+                        break;
+                    case ',':
+                        if (!currentDisplay.includes(',')) {
+                            display.textContent += ',';
+                        }
+                        break;
+                    default:
+                        if (currentDisplay === '0' || currentDisplay === 'Erro') {
+                            display.textContent = label;
+                        } else {
+                            display.textContent += label;
+                        }
+                        break;
+                }
+            }
+        }
+        createCalculator();
+    </script>
+</body>
+</html>
