@@ -100,7 +100,7 @@
 
             const buttons = [
                 ['AC', '+/-', '%', '/'],
-                ['7', '8', '9', 'x'],
+                ['7', '8', '9', '*'],
                 ['4', '5', '6', '-'],
                 ['1', '2', '3', '+'],
                 ['0', ',', '=']
@@ -113,7 +113,7 @@
                         button.classList.add('button');
                         button.textContent = label;
 
-                        if (['+', '-', 'x', '/'].includes(label)) {
+                        if (['+', '-', '*', '/'].includes(label)) {
                             button.classList.add('button-operator');
                         } else if (label === ',') {
                             button.classList.add('button-decimal');
